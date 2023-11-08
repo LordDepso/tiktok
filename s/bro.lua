@@ -328,6 +328,7 @@ Menu_Crates:Toggle("Crate ESP",function(bool)
 			Drawing.Disconnect()
 			table.remove(CrateDrawings, i)
 		end
+		table.clear(CrateDrawings) -- Android Exploits are crap
 	end
 end)
 
