@@ -169,8 +169,9 @@ function DrawingLib:Outline(Part, Config)
 	end
 
 	Lib.Disconnect = function()
-		Lib.SetVisible(false)
-		Lib.Render:Disconnect()
+		if Lib.Render then
+			Lib.Render:Disconnect()
+		end
 		if Box then
 			Box:Remove()
 		end
