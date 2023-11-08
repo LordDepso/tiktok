@@ -9,6 +9,7 @@ end
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local Camera = workspace.CurrentCamera 
 
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
@@ -30,8 +31,8 @@ local ESPConfig = {
 	Rainbow = true,
 	-------------
 	Tracers = true,
-	TracerThickness = 2,
-	TracerOpacity = 0.5,
+	TracerThickness = 3,
+	TracerOpacity = 0.7,
 	-------------
 	Boxes = true,
 	BoxThickness = 2,
@@ -122,9 +123,17 @@ function DrawingLib:WorkPositions(Part)
 		Vector2.new(ScreenCenter.X,ScreenCenter.Y)
 	}
 end
-function DrawingLib:RemoveDrawings()
-	for _, Drawing in next, Drawings do
-		Drawing.Disconnect()
+function DrawingLib:RemoveDrawings(All, Table)
+	if All then
+		for _, Drawing in next, Drawings do
+			Drawing.Disconnect()
+		end
+	else
+		for i, Drawing in next, Table do
+			Drawing.Disconnect()
+			table.remove(Table, i)
+		end
+		table.clear(Table) -- Android Exploits are crap
 	end
 end
 function DrawingLib:Outline(Part, Config)
@@ -227,6 +236,13 @@ function WeebTycoon:GetActiveCrates()
 	end
 	return Crates
 end
+function WeebTycoon:GetActiveNPCS()
+	local Girls = {}
+	for _, Girl in next, WeebTycoon.NPCS:GetChildren() do
+		table.insert(Girls, Girl)
+	end
+	return Girls 
+end
 function WeebTycoon:OpenCrate(Box)
 	local ProximityPrompt=Box:FindFirstChildOfClass("ProximityPrompt")
 	local Start = tick()
@@ -269,11 +285,19 @@ end)
 Menu_LocalPlayer:Toggle("Spawn at same point",function(bool)
 	Player.SpawnAtDeathPosition = bool
 end)
+Menu_LocalPlayer:Toggle("Instant Prompts",function(bool)shared.InstantPrompts=bool end)
+
+ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
+	if shared.InstantPrompts then
+		fireproximityprompt(prompt) -- You have to be in close range
+	end
+end)
 ------------
 local Menu_AnimeGirls = CreateWindow("15 year old girls") 
+local WomenDrawings = {}
 
 Menu_AnimeGirls:Label("You should get therapy",{
-	TextSize = 25,
+	TextSize = 10,
 	TextColor = Color3.fromRGB(255,255,255),
 	BgColor = Color3.fromRGB(69,69,69)
 }) 
@@ -297,6 +321,23 @@ Menu_AnimeGirls:Button("Make girls single (sigma)",function()
 	for _, IMissYou in next, WeebTycoon:GetOwned() do
 		print("Good bye", IMissYou)
 		WeebTycoon:DeleteGirl(IMissYou)
+	end
+end)
+
+Menu_AnimeGirls:Toggle("Women ESP",function(bool)
+	shared.WomenESP=bool 
+
+	if bool then
+		for _, NPC in next, WeebTycoon:GetActiveNPCS() do
+			table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
+		end
+	else
+		DrawingLib:RemoveDrawings(false, WomenDrawings)
+	end
+end)
+WeebTycoon.NPCS.ChildAdded:Connect(function(NPC)
+	if shared.WomenESP then
+		table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
 	end
 end)
 ------------
@@ -323,11 +364,7 @@ Menu_Crates:Toggle("Crate ESP",function(bool)
 			table.insert(CrateDrawings, DrawingLib:Outline(Box, ESPConfig))
 		end
 	else
-		for i, Drawing in next, CrateDrawings do
-			Drawing.Disconnect()
-			table.remove(CrateDrawings, i)
-		end
-		table.clear(CrateDrawings) -- Android Exploits are crap
+		DrawingLib:RemoveDrawings(false, CrateDrawings)
 	end
 end)
 
