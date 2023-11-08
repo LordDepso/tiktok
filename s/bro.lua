@@ -138,10 +138,13 @@ function DrawingLib:RemoveDrawings(All, Table)
 	else
 		print(#Table)
 		for i = 1,#Table do
-			pcall(function()
+			xpcall(function()
 				Table[i].Disconnect()
+				table.remove(Table, i)
+			end, function(err)
+				print(err)
 			end)
-			table.remove(Table, i)
+			print(i)
 		end
 	end
 end
