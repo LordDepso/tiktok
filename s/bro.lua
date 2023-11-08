@@ -132,7 +132,7 @@ function DrawingLib:RemoveDrawings(All, Table)
 	else
 		print(#Table)
 		for index, Drawing in next, Table do
-			spawn(Drawing.Disconnect)
+			pcall(Drawing.Disconnect)
 			print("Removed drawing")
 			table.remove(Table, index)
 		end
