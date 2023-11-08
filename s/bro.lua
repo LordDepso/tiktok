@@ -38,11 +38,6 @@ local ESPConfig = {
 	BoxOpacity = 0.9
 }
 
-VideoFrame.Size = UDim2.new(0, 200,0, 200)
-VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
-VideoFrame.Looped = true
-VideoFrame.Volume = 0
-
 if not isfile(FileName) then
 	local content = request({
 		Url = "https://cdn.discordapp.com/attachments/1145252565261492235/1171893729733390427/1108.mp4",
@@ -54,6 +49,10 @@ if not isfile(FileName) then
 end
 
 VideoFrame.Video = getcustomasset(FileName)
+VideoFrame.Size = UDim2.new(0, 200,0, 200)
+VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
+VideoFrame.Looped = true
+VideoFrame.Volume = 0
 VideoFrame:Play()
 
 local RainbowState
