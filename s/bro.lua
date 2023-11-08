@@ -3,6 +3,7 @@
 local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
 
 local LocalPlayer = game:GetService("Players").LocalPlayer
+local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Camera = workspace.CurrentCamera 
 
@@ -30,7 +31,7 @@ end
 
 if not isfile(FileName) then
 	local content = request({
-		Url = "https://media.tenor.com/Wg9fW_XEft0AAAPo/pout-christian-bale.mp4",
+		Url = "https://cdn.discordapp.com/attachments/1145252565261492235/1171893729733390427/1108.mp4",
 		Method = "GET"
 	})
 
@@ -47,11 +48,11 @@ function CharacterAdded(Character)
 	Player.Character = Character
 	Player.Root = Character:WaitForChild("HumanoidRootPart")
 	Player.Humanoid = Player.Character:WaitForChild("Humanoid")
-	
+
 	Player.Humanoid.Died:Connect(function()
 		Player.DeathPosition = Player.Root.CFrame
 	end)
-	
+
 	if Player.SpawnAtDeathPosition then
 		Player:Goto(Player.DeathPosition)
 	end
@@ -77,8 +78,94 @@ end
 CharacterAdded(LocalPlayer.Character)
 LocalPlayer.CharacterAdded:Connect(CharacterAdded)
 
---- Game wrapper
+--- Drawing library
+local DrawingLib = {}
+function DrawingLib:ToScreen(p)
+	local _, Visible = Camera:WorldToViewportPoint(p)--Camera:WorldToScreenPoint(p)
+	return Vector2.new(_.X, _.Y), Visible
+end
+function WorkPositions(Part)
+	if not Part then
+		return
+	end
 
+	local ScreenCenter,Visible = DrawingLib:ToScreen(Part.Position)
+
+	return {
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X,Part.Size.Y,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X,Part.Size.Y,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X,-Part.Size.Y,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X,-Part.Size.Y,0)).Position),
+		Vector2.new(ScreenCenter.X,ScreenCenter.Y)
+	}
+end
+function DrawingLib:Outline(Part, Config)
+	local Box, Tracer
+	local Lib = {}
+
+	if Config.Boxes then
+		Box = Drawing.new("Quad")
+		Box.Visible = true
+		Box.Color = Color3.fromRGB(255, 255, 255)
+		Box.Thickness = Config.BoxThickness or 1
+		Box.Transparency = Config.BoxOpacity or 1
+	end
+	if Config.Tracers then
+		Tracer = Drawing.new("Line")
+		Tracer.Visible = true
+		Tracer.Color = Color3.fromRGB(255, 255, 255)
+		Tracer.Thickness = Config.TracerThickness or 1
+		Tracer.Transparency = Config.TracerOpacity or 1
+		Tracer.From = Vector2.new(Camera.ViewportSize.X/2,  Camera.ViewportSize.Y-30)
+		Tracer.To = Tracer.From
+	end
+
+	Lib.SetVisible = function(Visible)
+		if Box then
+			Box.Visible = Visible 
+		end
+		if Tracer then
+			Tracer.Visible = Visible 
+		end
+	end
+	
+	Lib.Disconnect = function()
+		Lib.Render:Disconnect()
+		if Box then
+			Box:Remove()
+		end
+		if Tracer then
+			Tracer:Remove()
+		end
+	end
+
+	Lib.Render = RunService.RenderStepped:Connect(function()
+		if not Part or not Part.Parent then
+			return Lib.Disconnect()
+		end
+		
+		local Points = WorkPositions(Part)
+		if not Points then
+			return Lib.SetVisible(false)
+		end	
+		
+		Lib.SetVisible(true)
+		
+		if Box then
+			Box.PointA = Points[1]
+			Box.PointB = Points[2]
+			Box.PointC = Points[3]
+			Box.PointD = Points[4]
+		end
+		if Tracer then
+			Tracer.To = Points[5]
+		end
+	end)
+
+	return Lib
+end
+
+--- Game wrapper
 function WeebTycoon:BuyGirl(Type)
 	WeebTycoon.Remotes.HatchPet:FireServer(Type)
 end
@@ -97,6 +184,22 @@ function WeebTycoon:GetOwned()
 		table.insert(Cute.Value)
 	end
 	return Owned
+end
+function WeebTycoon:OpenCrate(Box)
+	local ProximityPrompt=Box:FindFirstChildOfClass("ProximityPrompt")
+	local Start = tick()
+
+	ProximityPrompt.HoldDuration = 0
+	Box.CanCollide = false
+
+	repeat 
+		Box.Velocity = Vector3.new(0,0,0)
+		Player:Goto(Box.CFrame*CFrame.new(0,0,3))
+
+		ProximityPrompt:InputHoldBegin()
+		task.wait()
+		ProximityPrompt:InputHoldEnd()
+	until (not Box or Box.Parent == nil) or (tick()-Start>3)
 end
 ---
 
@@ -121,13 +224,13 @@ Menu_LocalPlayer:Slider("JumpPower",{
 	Player.Humanoid.JumpPower = value
 end)
 
-Menu_LocalPlayer:Toggle("Spawn at death point",function(bool)
+Menu_LocalPlayer:Toggle("Spawn at same point",function(bool)
 	Player.SpawnAtDeathPosition = bool
 end)
 ------------
 local Menu_AnimeGirls = CreateWindow("15 year old girls") 
 
-Menu_AnimeGirls:Label("Get therapy",{
+Menu_AnimeGirls:Label("You should get therapy",{
 	TextSize = 25,
 	TextColor = Color3.fromRGB(255,255,255),
 	BgColor = Color3.fromRGB(69,69,69)
@@ -150,35 +253,36 @@ Menu_AnimeGirls:Button("Unequip all girls",function()
 end)
 Menu_AnimeGirls:Button("Make girls single (sigma)",function()
 	for _, IMissYou in next, WeebTycoon:GetOwned() do
+		print("Good bye", IMissYou)
 		WeebTycoon:DeleteGirl(IMissYou)
 	end
 end)
 ------------
-local Menu_Crates = CreateWindow("UWU Crates") 
+local Menu_Crates = CreateWindow("UWU Crates 🤑") 
 
 Menu_Crates:Button("Claim sussy collectables",function()
 	local Saved = Player.Root.CFrame
-	
+
 	for _, Box in next, workspace:GetChildren() do
 		if not table.find(WeebTycoon.Crates, Box.Name) then
 			continue
 		end
-		
-		local ProximityPrompt=Box:FindFirstChildOfClass("ProximityPrompt")
-		local Start = tick()
-
-		ProximityPrompt.HoldDuration = 0
-		Box.CanCollide = false
-
-		repeat 
-			Box.Velocity = Vector3.new(0,0,0)
-			Player:Goto(Box.CFrame*CFrame.new(0,0,3))
-
-			ProximityPrompt:InputHoldBegin()
-			task.wait()
-			ProximityPrompt:InputHoldEnd()
-		until (not Box or Box.Parent == nil) or (tick()-Start>3)
+		WeebTycoon:OpenCrate(Box)
 	end
 
 	Player:Goto(Saved)
+end)
+
+Menu_Crates:Toggle("Auto Collect",function(bool)shared.AutoCollect=bool end)
+Menu_Crates:Toggle("Crate ESP",function(bool)shared.CrateESP=bool end)
+
+workspace.ChildAdded:Connect(function(Part)
+	if table.find(WeebTycoon.Crates, Part.Name) then
+		if shared.AutoCollect then
+			WeebTycoon:OpenCrate(Part)
+		end
+		if shared.CrateESP then
+			DrawingLib:Outline(Part)
+		end
+	end
 end)
