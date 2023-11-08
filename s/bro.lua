@@ -13,7 +13,7 @@ local Camera = workspace.CurrentCamera
 
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 local VideoFrame = Instance.new("VideoFrame", ScreenGui)
-local FileName = "I WAS WATCHING PORN.mp4"
+local FileName = "today i found a girlriend.mp4"
 
 local Player = {}
 Player.NextSpawnPosition = nil
@@ -111,12 +111,15 @@ function WorkPositions(Part)
 	end
 
 	local ScreenCenter,Visible = DrawingLib:ToScreen(Part.Position)
+	if not Visible then
+		return
+	end
 
 	return {
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X,Part.Size.Y,0)).Position),
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X,Part.Size.Y,0)).Position),
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X,-Part.Size.Y,0)).Position),
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X,-Part.Size.Y,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X/2,Part.Size.Y/2,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X/2,Part.Size.Y/2,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X/2,-Part.Size.Y/2,0)).Position),
+		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X/2,-Part.Size.Y/2,0)).Position),
 		Vector2.new(ScreenCenter.X,ScreenCenter.Y)
 	}
 end
