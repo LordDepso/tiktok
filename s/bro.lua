@@ -55,13 +55,6 @@ VideoFrame.Size = UDim2.new(0, 200,0, 200)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
 VideoFrame.Looped = true
 VideoFrame.Volume = 0
-spawn(function()
-	while wait() do
-		VideoFrame:Play() -- Mobile exploits can't loop this video ????
-		wait(2)
-	end
-end)
-
 
 local RainbowState
 if ESPConfig.Rainbow then
@@ -236,7 +229,7 @@ end
 function WeebTycoon:GetOwned()
 	local Owned = {}
 	for _, Cute in next, LocalPlayer.PetInventory:GetChildren() do
-		table.insert(Cute.Value)
+		table.insert(Owned, Cute.Value)
 	end
 	return Owned
 end
