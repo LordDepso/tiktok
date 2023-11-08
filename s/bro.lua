@@ -132,7 +132,7 @@ function DrawingLib:RemoveDrawings(All, Table)
 	else
 		for _, Drawing in next, Table do
 			print("lalala")
-			repeat Drawing.Disconnect() until not Drawing.Disconnect
+			Drawing.Disconnect()
 			print("Removed drawing")
 			table.remove(Table, table.find(Table, Drawing))
 		end
@@ -169,6 +169,7 @@ function DrawingLib:Outline(Part, Config)
 	end
 
 	Lib.Disconnect = function()
+		Lib.SetVisible(false)
 		Lib.Render:Disconnect()
 		if Box then
 			Box:Remove()
