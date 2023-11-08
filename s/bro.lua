@@ -3,7 +3,7 @@
 
 local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
 function CreateWindow(Name)
-	return library:CreateWindow(Name):CreateFolder("Why do you play this game")
+	return library:CreateWindow(Name):CreateFolder("Please get therapy")
 end
 
 local Players = game:GetService("Players")
@@ -55,7 +55,13 @@ VideoFrame.Size = UDim2.new(0, 200,0, 200)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
 VideoFrame.Looped = true
 VideoFrame.Volume = 0
-VideoFrame:Play()
+spawn(function()
+	while wait() do
+		VideoFrame:Play() -- Mobile exploits can't loop this video ????
+		wait(2)
+	end
+end)
+
 
 local RainbowState
 if ESPConfig.Rainbow then
@@ -135,7 +141,6 @@ function DrawingLib:RemoveDrawings(All, Table)
 			pcall(function()
 				Table[i].Disconnect()
 			end)
-			print("Removed drawing 2")
 			table.remove(Table, i)
 		end
 	end
