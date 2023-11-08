@@ -1,6 +1,10 @@
 -- Depso, MasterMZ's script request
+-- loadstring(game:HttpGet(("https://raw.githubusercontent.com/LordDepso/tiktok/main/s/bro.lua")))()
 
 local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
+function CreateWindow(Name)
+	return library:CreateWindow(Name):CreateFolder("Why do you play this game")
+end
 
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
@@ -21,13 +25,22 @@ WeebTycoon.Crates = {"UwU Crate", "MoneyBag"}
 WeebTycoon.NPCS = workspace.npc
 WeebTycoon.Remotes = ReplicatedStorage.RemoteEvents
 
+local ESPConfig = {
+	Default_Color = Color3.fromRGB(200,200,200),
+	Rainbow = true,
+	-------------
+	Tracers = true,
+	TracerThickness = 1,
+	TracerOpacity = 0.2,
+	-------------
+	Boxes = true,
+	BoxThickness = 5,
+	BoxOpacity = 0.9
+}
+
 VideoFrame.Size = UDim2.new(0, 140,0, 140)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
 VideoFrame.Volume = 0
-
-function CreateWindow(Name)
-	return library:CreateWindow(Name):CreateFolder("Why do you play this game")
-end
 
 if not isfile(FileName) then
 	local content = request({
@@ -42,6 +55,14 @@ end
 VideoFrame.Video = getcustomasset(FileName)
 VideoFrame.Looped = true
 pcall(function() VideoFrame:Play() end)
+
+local RainbowState
+if ESPConfig.Rainbow then
+	RunService.RenderStepped:Connect(function()
+		local hue = tick()%5/5
+		RainbowState = Color3.fromHSV(hue,1,1)
+	end)
+end
 
 -- Player library
 function CharacterAdded(Character)
@@ -156,9 +177,11 @@ function DrawingLib:Outline(Part, Config)
 			Box.PointB = Points[2]
 			Box.PointC = Points[3]
 			Box.PointD = Points[4]
+			Box.Color = RainbowState or Config.Default_Color
 		end
 		if Tracer then
 			Tracer.To = Points[5]
+			Tracer.Color = RainbowState or Config.Default_Color
 		end
 	end)
 
@@ -282,7 +305,7 @@ workspace.ChildAdded:Connect(function(Part)
 			WeebTycoon:OpenCrate(Part)
 		end
 		if shared.CrateESP then
-			DrawingLib:Outline(Part)
+			DrawingLib:Outline(Part, ESPConfig)
 		end
 	end
 end)
