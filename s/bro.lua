@@ -6,7 +6,8 @@ function CreateWindow(Name)
 	return library:CreateWindow(Name):CreateFolder("Why do you play this game")
 end
 
-local LocalPlayer = game:GetService("Players").LocalPlayer
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ProximityPromptService = game:GetService("ProximityPromptService")
@@ -284,7 +285,7 @@ end)
 Menu_LocalPlayer:Toggle("Spawn at same point",function(bool)
 	Player.SpawnAtDeathPosition = bool
 end)
-Menu_LocalPlayer:Toggle("Instant Prompts",function(bool)shared.InstantPrompts=bool end)
+Menu_LocalPlayer:Toggle("Instant Proximity Prompts",function(bool)shared.InstantPrompts=bool end)
 
 ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
 	if shared.InstantPrompts then
@@ -323,22 +324,6 @@ Menu_AnimeGirls:Button("Make girls single (sigma)",function()
 	end
 end)
 
-Menu_AnimeGirls:Toggle("Women ESP",function(bool)
-	shared.WomenESP=bool 
-
-	if bool then
-		for _, NPC in next, WeebTycoon:GetActiveNPCS() do
-			table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
-		end
-	else
-		DrawingLib:RemoveDrawings(false, WomenDrawings)
-	end
-end)
-WeebTycoon.NPCS.ChildAdded:Connect(function(NPC)
-	if shared.WomenESP then
-		table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
-	end
-end)
 ------------
 local Menu_Crates = CreateWindow("UWU Crates 🤑") 
 
@@ -354,10 +339,16 @@ end)
 
 Menu_Crates:Toggle("Auto Collect",function(bool)shared.AutoCollect=bool end)
 
+
+--- ESP
+local Menu_ESP = CreateWindow("ESP Config") 
+
+local WomenDrawings = {}
 local CrateDrawings = {}
-Menu_Crates:Toggle("Crate ESP",function(bool)
+local PlayerDrawings = {}
+
+Menu_ESP:Toggle("Crate ESP",function(bool)
 	shared.CrateESP=bool 
-	
 	if bool then
 		for _, Box in next, WeebTycoon:GetActiveCrates() do
 			table.insert(CrateDrawings, DrawingLib:Outline(Box, ESPConfig))
@@ -366,7 +357,45 @@ Menu_Crates:Toggle("Crate ESP",function(bool)
 		DrawingLib:RemoveDrawings(false, CrateDrawings)
 	end
 end)
+Menu_ESP:Toggle("Women ESP",function(bool)
+	shared.WomenESP=bool 
 
+	if bool then
+		for _, NPC in next, WeebTycoon:GetActiveNPCS() do
+			table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
+		end
+	else
+		DrawingLib:RemoveDrawings(false, WomenDrawings)
+	end
+end)
+Menu_ESP:Toggle("Player ESP",function(bool)
+	shared.PlayerESP=bool 
+
+	if bool then
+		for _, Bozo in next, Players:GetPlayers() do
+			if Bozo and Bozo.Character and Bozo.Character.PrimaryPart then
+				table.insert(PlayerDrawings, DrawingLib:Outline(Bozo.Character.PrimaryPart, ESPConfig))
+			end
+		end
+	else
+		DrawingLib:RemoveDrawings(false, PlayerDrawings)
+	end
+end)
+
+---
+WeebTycoon.NPCS.ChildAdded:Connect(function(NPC)
+	if shared.WomenESP then
+		table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
+	end
+end)
+Players.PlayerAdded:Connect(function(Player)
+	Player.CharacterAdded:Connect(function(Character)
+		if shared.PlayerESP then
+			repeat task.wait() until Character.PrimaryPart
+			table.insert(PlayerDrawings, DrawingLib:Outline(Character.PrimaryPart, ESPConfig))
+		end
+	end)
+end)
 workspace.ChildAdded:Connect(function(Part)
 	if table.find(WeebTycoon.Crates, Part.Name) then
 		if shared.AutoCollect then
