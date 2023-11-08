@@ -100,12 +100,12 @@ CharacterAdded(LocalPlayer.Character)
 LocalPlayer.CharacterAdded:Connect(CharacterAdded)
 
 --- Drawing library
-local DrawingLib = {}
+local DrawingLib, Drawings = {}, {}
 function DrawingLib:ToScreen(p)
 	local _, Visible = Camera:WorldToViewportPoint(p)--Camera:WorldToScreenPoint(p)
 	return Vector2.new(_.X, _.Y), Visible
 end
-function WorkPositions(Part)
+function DrawingLib:WorkPositions(Part)
 	if not Part then
 		return
 	end
@@ -122,6 +122,11 @@ function WorkPositions(Part)
 		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X/2,-Part.Size.Y/2,0)).Position),
 		Vector2.new(ScreenCenter.X,ScreenCenter.Y)
 	}
+end
+function DrawingLib:RemoveDrawings()
+	for _, Drawing in next, Drawings do
+		Drawing.Disconnect()
+	end
 end
 function DrawingLib:Outline(Part, Config)
 	local Box, Tracer
@@ -152,9 +157,10 @@ function DrawingLib:Outline(Part, Config)
 			Tracer.Visible = Visible 
 		end
 	end
-	
+
 	Lib.Disconnect = function()
 		Lib.Render:Disconnect()
+		Lib = nil
 		if Box then
 			Box:Remove()
 		end
@@ -167,14 +173,14 @@ function DrawingLib:Outline(Part, Config)
 		if not Part or not Part.Parent then
 			return Lib.Disconnect()
 		end
-		
-		local Points = WorkPositions(Part)
+
+		local Points = DrawingLib:WorkPositions(Part)
 		if not Points then
 			return Lib.SetVisible(false)
 		end	
-		
+
 		Lib.SetVisible(true)
-		
+
 		if Box then
 			Box.PointA = Points[1]
 			Box.PointB = Points[2]
@@ -187,7 +193,8 @@ function DrawingLib:Outline(Part, Config)
 			Tracer.Color = RainbowState or Config.Default_Color
 		end
 	end)
-
+	
+	table.insert(Drawings, Lib)
 	return Lib
 end
 
@@ -210,6 +217,16 @@ function WeebTycoon:GetOwned()
 		table.insert(Cute.Value)
 	end
 	return Owned
+end
+function WeebTycoon:GetActiveCrates()
+	local Crates = {}
+
+	for _, Box in next, workspace:GetChildren() do
+		if table.find(WeebTycoon.Crates, Box.Name) then
+			table.insert(Crates, Box)
+		end
+	end
+	return Crates
 end
 function WeebTycoon:OpenCrate(Box)
 	local ProximityPrompt=Box:FindFirstChildOfClass("ProximityPrompt")
@@ -289,10 +306,7 @@ local Menu_Crates = CreateWindow("UWU Crates 🤑")
 Menu_Crates:Button("Claim sussy collectables",function()
 	local Saved = Player.Root.CFrame
 
-	for _, Box in next, workspace:GetChildren() do
-		if not table.find(WeebTycoon.Crates, Box.Name) then
-			continue
-		end
+	for _, Box in next, WeebTycoon:GetActiveCrates() do
 		WeebTycoon:OpenCrate(Box)
 	end
 
@@ -300,7 +314,22 @@ Menu_Crates:Button("Claim sussy collectables",function()
 end)
 
 Menu_Crates:Toggle("Auto Collect",function(bool)shared.AutoCollect=bool end)
-Menu_Crates:Toggle("Crate ESP",function(bool)shared.CrateESP=bool end)
+
+local CrateDrawings = {}
+Menu_Crates:Toggle("Crate ESP",function(bool)
+	shared.CrateESP=bool 
+	
+	if bool then
+		for _, Box in next, WeebTycoon:GetActiveCrates() do
+			table.insert(CrateDrawings, DrawingLib:Outline(Box, ESPConfig))
+		end
+	else
+		for i, Drawing in next, CrateDrawings do
+			Drawing.Disconnect()
+			table.remove(CrateDrawings, i)
+		end
+	end
+end)
 
 workspace.ChildAdded:Connect(function(Part)
 	if table.find(WeebTycoon.Crates, Part.Name) then
@@ -308,7 +337,7 @@ workspace.ChildAdded:Connect(function(Part)
 			WeebTycoon:OpenCrate(Part)
 		end
 		if shared.CrateESP then
-			DrawingLib:Outline(Part, ESPConfig)
+			table.insert(CrateDrawings, DrawingLib:Outline(Part, ESPConfig))
 		end
 	end
 end)
