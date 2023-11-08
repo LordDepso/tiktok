@@ -31,8 +31,8 @@ local ESPConfig = {
 	Rainbow = true,
 	-------------
 	Tracers = true,
-	TracerThickness = 3,
-	TracerOpacity = 0.7,
+	TracerThickness = 2,
+	TracerOpacity = 0.5,
 	-------------
 	Boxes = true,
 	BoxThickness = 2,
@@ -125,15 +125,14 @@ function DrawingLib:WorkPositions(Part)
 end
 function DrawingLib:RemoveDrawings(All, Table)
 	if All then
-		for _, Drawing in next, Drawings do
+		for _, Drawing in pairs, Drawings do
 			Drawing.Disconnect()
 		end
 	else
-		for i, Drawing in next, Table do
+		for _, Drawing in pairs, Table do
 			Drawing.Disconnect()
-			table.remove(Table, i)
+			table.remove(Table, table.find(Table, Drawing))
 		end
-		table.clear(Table) -- Android Exploits are crap
 	end
 end
 function DrawingLib:Outline(Part, Config)
@@ -168,13 +167,13 @@ function DrawingLib:Outline(Part, Config)
 
 	Lib.Disconnect = function()
 		Lib.Render:Disconnect()
-		Lib = nil
 		if Box then
 			Box:Remove()
 		end
 		if Tracer then
 			Tracer:Remove()
 		end
+		Lib = nil
 	end
 
 	Lib.Render = RunService.RenderStepped:Connect(function()
