@@ -131,8 +131,7 @@ function DrawingLib:RemoveDrawings(All, Table)
 		end
 	else
 		for _, Drawing in next, Table do
-			print("lalala")
-			Drawing.Disconnect()
+			spawn(Drawing.Disconnect)
 			print("Removed drawing")
 			table.remove(Table, table.find(Table, Drawing))
 		end
