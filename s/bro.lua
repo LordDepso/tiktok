@@ -15,7 +15,7 @@ local Camera = workspace.CurrentCamera
 
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 local VideoFrame = Instance.new("VideoFrame", ScreenGui)
-local FileName = "today i found a girlriend.mp4"
+local FileName = "girlriend.mp4"
 
 local Player = {}
 Player.NextSpawnPosition = nil
@@ -50,10 +50,10 @@ if not isfile(FileName) then
 	repeat wait() until isfile(FileName)
 end
 
+VideoFrame.Looped = true
 VideoFrame.Video = getcustomasset(FileName)
 VideoFrame.Size = UDim2.new(0, 200,0, 200)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
-VideoFrame.Looped = true
 VideoFrame.Volume = 0
 VideoFrame:Play()
 
@@ -130,8 +130,9 @@ function DrawingLib:RemoveDrawings(All, Table)
 			Drawing.Disconnect()
 		end
 	else
-		for _, Drawing in pairs, Table do
-			Drawing.Disconnect()
+		for _, Drawing in next, Table do
+			repeat Drawing.Disconnect() until not Drawing.Disconnect
+			print("Removed drawing")
 			table.remove(Table, table.find(Table, Drawing))
 		end
 	end
