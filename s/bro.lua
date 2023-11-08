@@ -130,14 +130,14 @@ function DrawingLib:RemoveDrawings(All, Table)
 		end
 	else
 		print(#Table)
-		for i = 1,#Table do
+		for index, Drawing in next, Table do
 			xpcall(function()
-				Table[i].Disconnect()
-				table.remove(Table, i)
+				Drawing.Disconnect()
+				table.remove(Table, index)
 			end, function(err)
-				print(err)
+				print(err, Drawing.Render)
 			end)
-			print(i)
+			print(index)
 		end
 	end
 end
