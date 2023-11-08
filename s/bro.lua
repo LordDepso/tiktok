@@ -181,7 +181,7 @@ function DrawingLib:Outline(Part, Config)
 		if Tracer then
 			Tracer:Remove()
 		end
-		Lib = nil
+		table.insert(Drawings, table.find(Drawings,Lib))
 	end
 
 	Lib.Render = RunService.RenderStepped:Connect(function()
@@ -208,7 +208,7 @@ function DrawingLib:Outline(Part, Config)
 			Tracer.Color = RainbowState or Config.Default_Color
 		end
 	end)
-	
+
 	table.insert(Drawings, Lib)
 	return Lib
 end
