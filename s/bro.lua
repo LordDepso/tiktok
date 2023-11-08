@@ -50,10 +50,10 @@ if not isfile(FileName) then
 	repeat wait() until isfile(FileName)
 end
 
-VideoFrame.Looped = true
 VideoFrame.Video = getcustomasset(FileName)
 VideoFrame.Size = UDim2.new(0, 200,0, 200)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
+VideoFrame.Looped = true
 VideoFrame.Volume = 0
 VideoFrame:Play()
 
@@ -131,6 +131,7 @@ function DrawingLib:RemoveDrawings(All, Table)
 		end
 	else
 		for _, Drawing in next, Table do
+			print("lalala")
 			repeat Drawing.Disconnect() until not Drawing.Disconnect
 			print("Removed drawing")
 			table.remove(Table, table.find(Table, Drawing))
@@ -371,7 +372,7 @@ Menu_ESP:Toggle("Women ESP",function(bool)
 end)
 Menu_ESP:Toggle("Player ESP",function(bool)
 	shared.PlayerESP=bool 
-
+	print(bool)
 	if bool then
 		for _, Bozo in next, Players:GetPlayers() do
 			if Bozo and Bozo.Character and Bozo.Character.PrimaryPart then
@@ -379,6 +380,7 @@ Menu_ESP:Toggle("Player ESP",function(bool)
 			end
 		end
 	else
+		print("removing drawings")
 		DrawingLib:RemoveDrawings(false, PlayerDrawings)
 	end
 end)
