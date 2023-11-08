@@ -30,16 +30,17 @@ local ESPConfig = {
 	Rainbow = true,
 	-------------
 	Tracers = true,
-	TracerThickness = 1,
-	TracerOpacity = 0.2,
+	TracerThickness = 2,
+	TracerOpacity = 0.5,
 	-------------
 	Boxes = true,
-	BoxThickness = 5,
+	BoxThickness = 2,
 	BoxOpacity = 0.9
 }
 
-VideoFrame.Size = UDim2.new(0, 140,0, 140)
+VideoFrame.Size = UDim2.new(0, 200,0, 200)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
+VideoFrame.Looped = true
 VideoFrame.Volume = 0
 
 if not isfile(FileName) then
@@ -53,8 +54,7 @@ if not isfile(FileName) then
 end
 
 VideoFrame.Video = getcustomasset(FileName)
-VideoFrame.Looped = true
-pcall(function() VideoFrame:Play() end)
+VideoFrame:Play()
 
 local RainbowState
 if ESPConfig.Rainbow then
