@@ -135,10 +135,10 @@ function DrawingLib:RemoveDrawings(All, Table)
 				Drawing.Disconnect()
 				table.remove(Table, index)
 			end, function(err)
-				print(err, Drawing.Render)
+				print(err)
 			end)
-			print(index)
 		end
+		print("aa")
 	end
 end
 function DrawingLib:Outline(Part, Config)
