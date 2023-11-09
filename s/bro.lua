@@ -3,7 +3,7 @@
 
 local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
 function CreateWindow(Name)
-	return library:CreateWindow(Name):CreateFolder("Please get therapy")
+	return library:CreateWindow(Name):CreateFolder("Please get therapy V1.1")
 end
 
 local Players = game:GetService("Players")
@@ -50,6 +50,24 @@ RunService.RenderStepped:Connect(function()
 	local hue = tick()%5/5
 	RainbowState = Color3.fromHSV(hue,1,1)
 end)
+
+coroutine.wrap(function() -- shout out to devx for making this
+	local is4k = true
+	local ispedopohile = true
+	while not not is4k~=false and not not ispedopohile~=false and wait(1) do
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "Screenshot Taken",
+			Text = "Check out your screenshots folder to see it.",
+			Duration = 3.0,
+			Button1 = "Open Folder",
+			Callback = function(text)
+				if text == "Open Folder" then
+					game:OpenScreenshotsFolder()
+				end
+			end
+		})
+	end
+end)()
 
 -- Player library
 function CharacterAdded(Character)
@@ -102,7 +120,7 @@ function DrawingLib:CreateTracer(Part, Table)
 	local Lib = {
 		Enabled = true
 	}
-	spawn(function()
+	coroutine.wrap(function()
 		while (Part and Lib.Enabled) and task.wait() do
 			local Position, Visible = DrawingLib:ToScreen(Part.Position)
 			if not Visible then
@@ -117,7 +135,7 @@ function DrawingLib:CreateTracer(Part, Table)
 		print("Removed")
 		Tracer:Remove()
 		table.remove(Table, table.find(Table, Lib))
-	end)
+	end)()
 
 	table.insert(Table, Lib)
 end
@@ -159,7 +177,10 @@ function WeebTycoon:GetActiveCrates()
 end
 function WeebTycoon:GetActiveNPCS()
 	local Girls = {}
-	for _, Girl in next, WeebTycoon.NPCS:GetChildren() do
+	for _, Girl in next, WeebTycoon:GetChildren() do
+		if not Girl:FindFirstChild("Attraction 0") then
+			continue
+		end
 		table.insert(Girls, Girl)
 	end
 	return Girls 
@@ -283,7 +304,9 @@ Menu_ESP:Toggle("Women ESP",function(bool)
 
 	if bool then
 		for _, NPC in next, WeebTycoon:GetActiveNPCS() do
-			DrawingLib:CreateTracer(NPC.PrimaryPart, WomenDrawings)
+			if NPC.PrimaryPart then
+				DrawingLib:CreateTracer(NPC.PrimaryPart, WomenDrawings)
+			end
 		end
 		return
 	end
