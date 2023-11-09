@@ -121,7 +121,7 @@ function DrawingLib:CreateTracer(Part, Table)
 		Enabled = true
 	}
 	coroutine.wrap(function()
-		while (Part and Lib.Enabled) and task.wait() do
+		while ((Part and Part.Parent ~= nil) and Lib.Enabled) and task.wait() do
 			local Position, Visible = DrawingLib:ToScreen(Part.Position)
 			if not Visible then
 				Tracer.Visible = false
@@ -132,7 +132,6 @@ function DrawingLib:CreateTracer(Part, Table)
 			Tracer.To = Position
 			Tracer.Color = RainbowState
 		end
-		print("Removed")
 		Tracer:Remove()
 		table.remove(Table, table.find(Table, Lib))
 	end)()
@@ -186,6 +185,7 @@ function WeebTycoon:GetActiveNPCS()
 	return Girls 
 end
 function WeebTycoon:OpenCrate(Box)
+	repeat wait() until Box:FindFirstChildOfClass("ProximityPrompt")
 	local ProximityPrompt=Box:FindFirstChildOfClass("ProximityPrompt")
 	local Start = tick()
 
