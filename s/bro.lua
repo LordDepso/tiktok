@@ -366,7 +366,12 @@ Menu_ESP:Toggle("Crate ESP",function(bool)
 			table.insert(CrateDrawings, DrawingLib:Outline(Box, ESPConfig))
 		end
 	else
-		DrawingLib:RemoveDrawings(false, CrateDrawings)
+		xpcall(function()
+			DrawingLib:RemoveDrawings(false, CrateDrawings)
+		end, function(ERR)
+			print(ERR)
+		end)
+		
 	end
 end)
 Menu_ESP:Toggle("Women ESP",function(bool)
