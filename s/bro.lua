@@ -27,19 +27,6 @@ WeebTycoon.Crates = {"UwU Crate", "MoneyBag"}
 WeebTycoon.NPCS = workspace.npc
 WeebTycoon.Remotes = ReplicatedStorage.RemoteEvents
 
-local ESPConfig = {
-	Default_Color = Color3.fromRGB(200,200,200),
-	Rainbow = true,
-	-------------
-	Tracers = true,
-	TracerThickness = 2,
-	TracerOpacity = 0.5,
-	-------------
-	Boxes = true,
-	BoxThickness = 2,
-	BoxOpacity = 0.9
-}
-
 if not isfile(FileName) then
 	local content = request({
 		Url = "https://cdn.discordapp.com/attachments/1145252565261492235/1171912155583500298/11081.mp4",
@@ -51,18 +38,18 @@ if not isfile(FileName) then
 end
 
 VideoFrame.Video = getcustomasset(FileName)
+VideoFrame.Loaded:Wait()
 VideoFrame.Size = UDim2.new(0, 200,0, 200)
 VideoFrame.Position = UDim2.new(0, 0,1, -VideoFrame.Size.Y.Offset)
 VideoFrame.Looped = true
 VideoFrame.Volume = 0
+VideoFrame:Play()
 
 local RainbowState
-if ESPConfig.Rainbow then
-	RunService.RenderStepped:Connect(function()
-		local hue = tick()%5/5
-		RainbowState = Color3.fromHSV(hue,1,1)
-	end)
-end
+RunService.RenderStepped:Connect(function()
+	local hue = tick()%5/5
+	RainbowState = Color3.fromHSV(hue,1,1)
+end)
 
 -- Player library
 function CharacterAdded(Character)
@@ -100,122 +87,44 @@ CharacterAdded(LocalPlayer.Character)
 LocalPlayer.CharacterAdded:Connect(CharacterAdded)
 
 --- Drawing library
-local DrawingLib, Drawings = {}, {}
+local DrawingLib = {}
 function DrawingLib:ToScreen(p)
 	local _, Visible = Camera:WorldToViewportPoint(p)--Camera:WorldToScreenPoint(p)
 	return Vector2.new(_.X, _.Y), Visible
 end
-function DrawingLib:WorkPositions(Part)
-	if not Part then
-		return
-	end
-
-	local ScreenCenter,Visible = DrawingLib:ToScreen(Part.Position)
-	if not Visible then
-		return
-	end
-
-	return {
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X/2,Part.Size.Y/2,0)).Position),
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X/2,Part.Size.Y/2,0)).Position),
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(Part.Size.X/2,-Part.Size.Y/2,0)).Position),
-		DrawingLib:ToScreen((Part.CFrame * CFrame.new(-Part.Size.X/2,-Part.Size.Y/2,0)).Position),
-		Vector2.new(ScreenCenter.X,ScreenCenter.Y)
+function DrawingLib:CreateTracer(Part, Table)
+	local Tracer = Drawing.new("Line")
+	Tracer.Visible = true
+	Tracer.Color = Color3.fromRGB(255, 255, 255)
+	Tracer.Thickness = 1
+	Tracer.From = Vector2.new(Camera.ViewportSize.X/2,  Camera.ViewportSize.Y-30)
+	Tracer.To = Tracer.From
+	local Lib = {
+		Enabled = true
 	}
-end
-function DrawingLib:RemoveDrawings(All, Table)
-	if All then
-		for _, Drawing in pairs, Drawings do
-			Drawing.Disconnect()
+	spawn(function()
+		while (Part and Lib.Enabled) and task.wait() do
+			local Position, Visible = DrawingLib:ToScreen(Part.Position)
+			if not Visible then
+				Tracer.Visible = false
+				continue
+			else
+				Tracer.Visible = true
+			end
+			Tracer.To = Position
+			Tracer.Color = RainbowState
 		end
-	else
-		print(#Table)
-		for index, Drawing in next, Table do
-			xpcall(function()
-				Drawing.Disconnect()
-				table.remove(Table, index)
-			end, function(err)
-				print(err)
-			end)
-		end
-		print("aa")
-	end
-end
-function DrawingLib:Outline(Part, Config)
-	local Box, Tracer
-	local Lib = {Enabled=true}
-
-	if Config.Boxes then
-		Box = Drawing.new("Quad")
-		Box.Visible = true
-		Box.Color = Color3.fromRGB(255, 255, 255)
-		Box.Thickness = Config.BoxThickness or 1
-		Box.Transparency = Config.BoxOpacity or 1
-	end
-	if Config.Tracers then
-		Tracer = Drawing.new("Line")
-		Tracer.Visible = true
-		Tracer.Color = Color3.fromRGB(255, 255, 255)
-		Tracer.Thickness = Config.TracerThickness or 1
-		Tracer.Transparency = Config.TracerOpacity or 1
-		Tracer.From = Vector2.new(Camera.ViewportSize.X/2,  Camera.ViewportSize.Y-30)
-		Tracer.To = Tracer.From
-	end
-
-	Lib.SetVisible = function(Visible)
-		if Box then
-			Box.Visible = Visible 
-		end
-		if Tracer then
-			Tracer.Visible = Visible 
-		end
-	end
-
-	Lib.Disconnect = function()
-		if Lib.Render then
-			Lib.Render:Disconnect()
-		end
-		if Box then
-			Box:Remove()
-		end
-		if Tracer then
-			Tracer:Remove()
-		end
-		table.insert(Drawings, table.find(Drawings,Lib))
-	end
-
-	Lib.Render = RunService.RenderStepped:Connect(function()
-		if not Part or not Part.Parent then
-			return Lib.Disconnect()
-		end
-		if not Lib.Enabled then
-			return
-		end
-
-		local Points = DrawingLib:WorkPositions(Part)
-		if not Points then
-			return Lib.SetVisible(false)
-		end	
-
-		Lib.SetVisible(true)
-
-		if Box then
-			Box.PointA = Points[1]
-			Box.PointB = Points[2]
-			Box.PointC = Points[3]
-			Box.PointD = Points[4]
-			Box.Color = RainbowState or Config.Default_Color
-		end
-		if Tracer then
-			Tracer.To = Points[5]
-			Tracer.Color = RainbowState or Config.Default_Color
-		end
+		print("Removed")
+		Tracer:Remove()
+		table.remove(Table, table.find(Table, Lib))
 	end)
 
-	pcall(function()
-		table.insert(Drawings, Lib)
-	end)
-	return Lib
+	table.insert(Table, Lib)
+end
+function DrawingLib:ClearDrawings(Table)
+	for _, Lib in Table do
+		Lib.Enabled = false
+	end
 end
 
 --- Game wrapper
@@ -363,54 +272,52 @@ Menu_ESP:Toggle("Crate ESP",function(bool)
 	shared.CrateESP=bool 
 	if bool then
 		for _, Box in next, WeebTycoon:GetActiveCrates() do
-			table.insert(CrateDrawings, DrawingLib:Outline(Box, ESPConfig))
+			DrawingLib:CreateTracer(Box, CrateDrawings)
 		end
-	else
-		xpcall(function()
-			DrawingLib:RemoveDrawings(false, CrateDrawings)
-		end, function(ERR)
-			print(ERR)
-		end)
-		
+		return
 	end
+	DrawingLib:ClearDrawings(CrateDrawings)
 end)
 Menu_ESP:Toggle("Women ESP",function(bool)
 	shared.WomenESP=bool 
 
 	if bool then
 		for _, NPC in next, WeebTycoon:GetActiveNPCS() do
-			table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
+			DrawingLib:CreateTracer(NPC.PrimaryPart, WomenDrawings)
 		end
-	else
-		DrawingLib:RemoveDrawings(false, WomenDrawings)
+		return
 	end
+	DrawingLib:ClearDrawings(WomenDrawings)
 end)
 Menu_ESP:Toggle("Player ESP",function(bool)
 	shared.PlayerESP=bool 
 	print(bool)
 	if bool then
 		for _, Bozo in next, Players:GetPlayers() do
+			if Bozo and Bozo == LocalPlayer then
+				continue
+			end
 			if Bozo and Bozo.Character and Bozo.Character.PrimaryPart then
-				table.insert(PlayerDrawings, DrawingLib:Outline(Bozo.Character.PrimaryPart, ESPConfig))
+				DrawingLib:CreateTracer(Bozo.Character.PrimaryPart, PlayerDrawings)
 			end
 		end
-	else
-		print("removing drawings")
-		DrawingLib:RemoveDrawings(false, PlayerDrawings)
+		return
+		
 	end
+	DrawingLib:ClearDrawings(PlayerDrawings)
 end)
 
 ---
 WeebTycoon.NPCS.ChildAdded:Connect(function(NPC)
 	if shared.WomenESP then
-		table.insert(WomenDrawings, DrawingLib:Outline(NPC.PrimaryPart, ESPConfig))
+		DrawingLib:CreateTracer(NPC.PrimaryPart, WomenDrawings)
 	end
 end)
 Players.PlayerAdded:Connect(function(Player)
 	Player.CharacterAdded:Connect(function(Character)
 		if shared.PlayerESP then
 			repeat task.wait() until Character.PrimaryPart
-			table.insert(PlayerDrawings, DrawingLib:Outline(Character.PrimaryPart, ESPConfig))
+			DrawingLib:CreateTracer(Character.PrimaryPart, PlayerDrawings)
 		end
 	end)
 end)
@@ -420,7 +327,7 @@ workspace.ChildAdded:Connect(function(Part)
 			WeebTycoon:OpenCrate(Part)
 		end
 		if shared.CrateESP then
-			table.insert(CrateDrawings, DrawingLib:Outline(Part, ESPConfig))
+			DrawingLib:CreateTracer(Part, CrateDrawings)
 		end
 	end
 end)
