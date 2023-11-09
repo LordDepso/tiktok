@@ -212,7 +212,9 @@ function DrawingLib:Outline(Part, Config)
 		end
 	end)
 
-	table.insert(Drawings, Lib)
+	pcall(function()
+		table.insert(Drawings, Lib)
+	end)
 	return Lib
 end
 
