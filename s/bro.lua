@@ -143,7 +143,7 @@ function DrawingLib:RemoveDrawings(All, Table)
 end
 function DrawingLib:Outline(Part, Config)
 	local Box, Tracer
-	local Lib = {}
+	local Lib = {Enabled=true}
 
 	if Config.Boxes then
 		Box = Drawing.new("Quad")
@@ -187,6 +187,9 @@ function DrawingLib:Outline(Part, Config)
 	Lib.Render = RunService.RenderStepped:Connect(function()
 		if not Part or not Part.Parent then
 			return Lib.Disconnect()
+		end
+		if not Lib.Enabled then
+			return
 		end
 
 		local Points = DrawingLib:WorkPositions(Part)
