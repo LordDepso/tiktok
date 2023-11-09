@@ -1,9 +1,50 @@
--- Depso, MasterMZ's script request
+--[[
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣶⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣤⣶⣦⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠘⢯⣗⣲⣤⣠⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠉⠀⠀⠀⠀⠀⢀⡤⠖⠚⠉⠉⠉⠉⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣠⣤⣶⣶⣶⡆⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⠛⠀⠀⠀⢀⡀⠀⠀⠐⠚⠁⣀⠀⠀⠀⣴⠚⠉⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⡿⠛⠁⠀⠀⢀⡴⠋⠀⠀⠀⢀⣠⠚⠁⢀⣴⠖⠁⠀⢰⠀⢰⡀⠀⠀⠈⠻⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⢠⣾⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⢸⣿⣿⡟⠑⠀⠀⠀⣠⠟⠀⠀⠀⠀⣠⠞⠁⠀⣠⠞⠁⠀⠀⢠⡟⠀⢸⣧⠀⠀⢀⠀⠈⢿⣿⣿⠀⠀⠀⠀⠀⠀
+⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⠏⠀⠀⠀⠀⣰⠋⠀⠀⠀⢠⡾⠃⠀⢀⣴⠋⠀⠀⠀⣴⢿⠃⠀⡎⠹⣧⠀⠈⣷⡀⠈⣿⡇⠀⠀⠀⠀⠀⠀
+⠀⢰⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⣰⣶⠇⠀⠀⢀⡇⣰⠇⡔⠀⠀⣰⡟⠁⠀⣠⣾⠃⠀⠀⢀⡞⢁⡟⠀⣼⠁⠀⢻⡦⠄⠸⣷⠀⢹⣸⠀⠀⠀⠀⠀⠀
+⠀⣾⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡏⠀⠀⠀⣼⢁⣏⡞⠀⢀⣼⠏⠀⣴⡿⢣⠏⠀⢀⣾⠋⠀⡼⠁⣼⠃⠀⠀⢸⣷⢤⣤⣿⠀⠈⣿⠀⠀⠀⠀⠀⠀
+⢰⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⠀⠐⠀⢰⠇⡾⠺⣄⣰⠋⡏⣠⣾⡟⠁⡞⠀⣰⣿⠃⠀⣰⢃⡼⠁⠀⠀⠀⢸⢳⡶⠒⣿⠀⠀⣿⠀⠀⠀⠀⠀⠀
+⢸⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠶⠋⣾⡈⢠⣄⣀⣸⣰⡇⢀⡼⠙⢾⣴⣫⠏⠀⢠⠇⡴⠁⠃⠀⣰⣧⠞⠁⠀⠀⠀⠀⢸⠀⡇⠀⡇⠀⢀⢸⡀⠀⠀⠀⠀⠀
+⢸⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⡇⢸⣿⣿⠛⣿⣿⠿⢷⣶⣿⣶⣿⣭⣶⣾⣿⣁⣀⡀⣼⣽⡧⠶⠒⠉⠉⠉⠀⡎⢰⡇⢸⠁⠀⡞⢸⠀⠀⠀⠀⠀⠀
+⠸⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⢸⣿⣿⡀⢹⡟⢀⠀⣿⡏⢸⣿⣿⠏⠉⣿⣿⣿⡿⢿⣿⡿⠿⣶⣶⣶⣶⣾⣥⣼⣇⣞⣆⣸⠁⣿⠀⠀⠀⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⣴⢏⣇⣾⣿⣿⡇⠸⢀⣿⠀⡏⢀⣿⣿⠏⣰⡇⢸⣿⣿⠁⢸⣿⠁⣷⣶⣤⣾⡟⠉⣿⣿⡟⢹⣿⡏⣼⣿⠀⠀⠀⠀⠀⠀
+⠀⢸⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⡼⡃⢸⣿⣿⣿⣿⣇⣀⣼⣿⡇⠀⣼⣿⠋⢀⣉⣉⠀⢿⣿⠀⣸⡟⠀⣉⣉⣹⣿⡇⢰⣿⣿⠃⢸⣿⡿⠋⣿⡆⠀⠀⠀⠀⠀
+⠀⠀⠻⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⢠⠞⣹⢡⣿⢻⡏⢹⢿⣿⣟⠛⠻⠿⠿⠿⠷⣶⣿⣿⣿⣦⣸⣯⣀⣿⡇⢀⣿⣿⣿⣿⡇⠸⣿⡿⠀⣾⣿⠁⢰⣿⣷⡀⠀⠀⠀⠀
+⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣶⣴⠏⢀⣧⡿⣿⠸⣿⠸⣎⢻⣿⡻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠛⠛⠻⠿⠿⠿⢿⣿⣶⣤⣤⣾⣿⣿⢀⣿⠉⢧⡻⠄⠀⠀⠀
+⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⠀⣾⡟⠀⣿⠀⢻⡇⢹⣆⠹⣧⠈⠳⠦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡤⢺⣿⡟⠉⣹⣿⣾⢿⡄⠈⢳⡀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⡏⡀⣿⠁⠀⠸⣧⠈⢷⢸⢻⣷⣬⣷⣀⠀⠀⠀⠀⢰⣶⣾⣯⣽⣳⣦⣤⠀⠀⠀⠀⠀⠀⣠⡿⢋⣠⣾⡷⢛⢻⣿⣇⡇⢸⣿⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢇⠙⠾⣆⠀⠀⠘⢷⣿⡟⢀⡙⢧⣿⣿⣛⠲⠄⠀⠸⣿⡏⠀⠀⢙⣿⡇⠀⠀⠦⠤⢤⣶⣯⣾⢟⣫⡿⠁⣎⡾⠈⣿⢧⡞⢸⠇⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠴⠚⢧⡀⠈⠓⠄⢀⡴⠋⠙⠷⣶⡶⠾⣿⣿⣿⣃⡀⠀⠉⢅⣀⣀⣘⡿⠁⠀⠀⣀⣴⣿⡿⠟⣻⡿⠋⢀⣾⣟⡁⢠⣿⠟⣠⡟⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡏⠀⠀⠀⠉⠓⠶⠦⣤⣀⡠⢤⣀⣈⣽⡳⠯⣿⣿⣿⣿⣾⣄⡀⠀⠀⢀⣀⣤⣶⣿⡿⢟⡥⠴⠾⢥⣤⠞⣻⠋⠀⠙⣿⡵⢟⡁⠻⢤⡀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⢹⠀⠀⢠⠀⠀⠀⠀⣀⣀⡉⠛⡿⠋⠀⣿⣄⢸⡿⣇⠹⣿⣿⣿⣿⣿⣿⣿⣿⠟⠉⠉⣙⣇⠀⠀⠀⠙⡾⠁⠀⠀⣠⠋⠉⢳⡙⠲⣄⠁⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠈⡆⠀⠘⡇⠀⠀⢸⡁⠀⠙⣾⠁⠀⢸⠉⠻⣆⡇⢹⣀⠈⠙⢿⣿⣿⣿⢿⡏⠀⣠⠞⣡⢜⣳⡄⠀⢰⠁⠀⣠⠞⠁⠀⣠⠞⠉⡇⠈⢳⡀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⠀⠸⡄⠀⢹⡀⣤⠒⢧⡀⠀⠈⣇⠀⢸⡀⠀⢹⠇⣼⠉⢙⠦⢄⣈⡉⠀⠼⡄⣼⠃⣴⡟⠋⢹⠇⠀⣼⠀⢠⠇⠀⣠⠾⠁⠀⠀⠛⠀⠀⣷
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⡆⠀⠱⡄⠀⡧⢿⡀⠀⠳⡄⠀⠸⡦⠀⢳⣴⣫⠾⠛⣷⣸⡀⠀⢂⠀⠀⠀⣻⣿⣰⠋⠀⠀⣿⠀⠀⠹⠤⢾⣀⡾⠁⢀⡠⠀⠀⠀⠀⠀⡿
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡅⠀⠙⣄⠀⠙⢦⡀⣿⠀⠀⢹⡀⣀⣀⣼⡍⠻⠿⠙⢶⠞⠛⠉⣻⣿⠀⠀⠀⠘⢦⡀⠀⠀⠀⠈⠛⠒⠻⠄⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠳⠆⠈⠳⠤⠨⠗⠛⠀⠀⠀⠏⠻⠇⠼⠁⠂⠀⠀⠀⠃⠀⠸⠋⠿⠷⠄⠀⠰⠃⠙⠲⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀https://pedo.help/
+
+MasterMZ's script request
+Shoutout to DevX for the sussy quotes
+
+- Depso
+
+
+
+!!! ATTENTION, THIS IS A JOKE !!!
+]]
+
 -- loadstring(game:HttpGet(("https://raw.githubusercontent.com/LordDepso/tiktok/main/s/bro.lua")))()
 
 local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
 function CreateWindow(Name)
-	return library:CreateWindow(Name):CreateFolder("Please get therapy V1.1")
+	return library:CreateWindow(Name):CreateFolder("Please get therapy")
 end
 
 local Players = game:GetService("Players")
@@ -174,10 +215,13 @@ function WeebTycoon:GetActiveCrates()
 	end
 	return Crates
 end
+function WeebTycoon:IsNPC(Girl)
+	return Girl:FindFirstChild("Attraction 0")
+end
 function WeebTycoon:GetActiveNPCS()
 	local Girls = {}
-	for _, Girl in next, WeebTycoon:GetChildren() do
-		if not Girl:FindFirstChild("Attraction 0") then
+	for _, Girl in next, workspace:GetChildren() do
+		if not WeebTycoon:IsNPC(Girl) then
 			continue
 		end
 		table.insert(Girls, Girl)
@@ -185,6 +229,7 @@ function WeebTycoon:GetActiveNPCS()
 	return Girls 
 end
 function WeebTycoon:OpenCrate(Box)
+	local Saved = Player.Root.CFrame
 	repeat wait() until Box:FindFirstChildOfClass("ProximityPrompt")
 	local ProximityPrompt=Box:FindFirstChildOfClass("ProximityPrompt")
 	local Start = tick()
@@ -200,6 +245,8 @@ function WeebTycoon:OpenCrate(Box)
 		task.wait()
 		ProximityPrompt:InputHoldEnd()
 	until (not Box or Box.Parent == nil) or (tick()-Start>3)
+	
+	Player:Goto(Saved)
 end
 ---
 
@@ -209,7 +256,7 @@ local Menu_LocalPlayer = CreateWindow("Player | Depso")
 
 Menu_LocalPlayer:Slider("Walkspeed",{
 	min = 16,
-	max = 100,
+	max = 120,
 	precise = false 
 },function(value)
 	Player.Humanoid.WalkSpeed = value
@@ -238,8 +285,8 @@ end)
 local Menu_AnimeGirls = CreateWindow("15 year old girls") 
 local WomenDrawings = {}
 
-Menu_AnimeGirls:Label("You should get therapy",{
-	TextSize = 10,
+Menu_AnimeGirls:Label("12 is old, i was thinking 6",{
+	TextSize = 16,
 	TextColor = Color3.fromRGB(255,255,255),
 	BgColor = Color3.fromRGB(69,69,69)
 }) 
@@ -249,7 +296,12 @@ for _, GirlType in next, workspace.Incubators:GetChildren() do
 		WeebTycoon:BuyGirl(GirlType)
 	end)
 end
-Menu_AnimeGirls:Button("Equip all horny girls",function()
+Menu_AnimeGirls:Label("fake gyat 🤑🤑🤑🤑",{
+	TextSize = 16,
+	TextColor = Color3.fromRGB(255,255,255),
+	BgColor = Color3.fromRGB(69,69,69)
+}) 
+Menu_AnimeGirls:Button("Equip all horny girls 🥵",function()
 	for _, Babe in next, WeebTycoon:GetOwned() do
 		WeebTycoon:EquipGirl(Babe)
 	end
@@ -259,7 +311,7 @@ Menu_AnimeGirls:Button("Unequip all girls",function()
 		WeebTycoon:UnEquip(goodbye.Name)
 	end
 end)
-Menu_AnimeGirls:Button("Make girls single (sigma)",function()
+Menu_AnimeGirls:Button("Make girls single (sigma 🥶)",function()
 	for _, IMissYou in next, WeebTycoon:GetOwned() do
 		print("Good bye", IMissYou)
 		WeebTycoon:DeleteGirl(IMissYou)
@@ -289,7 +341,13 @@ local WomenDrawings = {}
 local CrateDrawings = {}
 local PlayerDrawings = {}
 
-Menu_ESP:Toggle("Crate ESP",function(bool)
+Menu_ESP:Label("https://pedo.help/",{
+	TextSize = 16,
+	TextColor = Color3.fromRGB(255,255,255),
+	BgColor = Color3.fromRGB(69,69,69)
+}) 
+
+Menu_ESP:Toggle("Crates",function(bool)
 	shared.CrateESP=bool 
 	if bool then
 		for _, Box in next, WeebTycoon:GetActiveCrates() do
@@ -299,7 +357,7 @@ Menu_ESP:Toggle("Crate ESP",function(bool)
 	end
 	DrawingLib:ClearDrawings(CrateDrawings)
 end)
-Menu_ESP:Toggle("Women ESP",function(bool)
+Menu_ESP:Toggle("Women 🤑",function(bool)
 	shared.WomenESP=bool 
 
 	if bool then
@@ -312,7 +370,7 @@ Menu_ESP:Toggle("Women ESP",function(bool)
 	end
 	DrawingLib:ClearDrawings(WomenDrawings)
 end)
-Menu_ESP:Toggle("Player ESP",function(bool)
+Menu_ESP:Toggle("Other Players",function(bool)
 	shared.PlayerESP=bool 
 	print(bool)
 	if bool then
@@ -331,11 +389,6 @@ Menu_ESP:Toggle("Player ESP",function(bool)
 end)
 
 ---
-WeebTycoon.NPCS.ChildAdded:Connect(function(NPC)
-	if shared.WomenESP then
-		DrawingLib:CreateTracer(NPC.PrimaryPart, WomenDrawings)
-	end
-end)
 Players.PlayerAdded:Connect(function(Player)
 	Player.CharacterAdded:Connect(function(Character)
 		if shared.PlayerESP then
@@ -345,6 +398,12 @@ Players.PlayerAdded:Connect(function(Player)
 	end)
 end)
 workspace.ChildAdded:Connect(function(Part)
+	wait(.5)
+	if WeebTycoon:IsNPC(Part) then
+		repeat wait() until Part.PrimaryPart
+		DrawingLib:CreateTracer(Part.PrimaryPart, WomenDrawings)
+		return
+	end
 	if table.find(WeebTycoon.Crates, Part.Name) then
 		if shared.AutoCollect then
 			WeebTycoon:OpenCrate(Part)
