@@ -1,7 +1,8 @@
 .ads {
   position: absolute;
   display: flex;
-  width: calc(100% - 10px);
+  width: calc(100% - 15px);
+  z-index: -1;
 }
 .ads > :nth-child(2) {
   position: absolute;
@@ -10,7 +11,7 @@
 
 .main {
   margin-left: 160px;
-  width:  82%;
+  width:  calc(100% - 160px - 128px - 60px); /*I know i should be using a table layout*/ 
 }
 
 table {
