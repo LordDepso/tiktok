@@ -1,0 +1,26 @@
+.ads {
+  position: absolute;
+  display: flex;
+  width: calc(100% - 10px);
+}
+.ads > :nth-child(2) {
+  position: absolute;
+  right: 0;
+} 
+
+.main {
+  margin-left: 160px;
+  width:  82%;
+}
+
+table {
+  min-width: 400px;
+}
+
+td, th {
+  text-align: left;
+}
+
+hr {
+  margin-top: 20px;
+}
