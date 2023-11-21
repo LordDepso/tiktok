@@ -33,7 +33,7 @@
     filter: drop-shadow(0px 0px 70px);
     -webkit-filter: drop-shadow(0px 0px 70px rgba(0, 0, 0, 1));
     -moz-filter: drop-shadow(0px 0px 70px rgba(0, 0, 0, 1));
-    animation: float 4s infinite;
+    animation: float 8s infinite;
 }
 
 @keyframes float {
@@ -179,12 +179,17 @@ td {
 .adddiv > img {
     width: 160px !important;
     height: 600px !important;
+    border-radius: 6px;
+    border: 1px solid rgba(60,60,60,0.5);
+    mask-image: linear-gradient(to top, rgba(255,255,255,0.68) 0%,rgb(255,255,255) 100%);
+   -webkit-mask-image: linear-gradient(to top, rgba(255,255,255,0.8) 0%,rgb(255,255,255) 100%);
 }
 
 .rated-with {
     color: gray;
     font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     text-align: left;
+    margin: 1%;
 }
 
 .vouchesheader {
@@ -246,7 +251,10 @@ td {
 
 .stars-container {
     text-align: left;
+    display: flex;
+    padding: 5px 0;
 }
+
 
 .creditsspan {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -255,5 +263,6 @@ td {
 .footerdiv {
     text-align: center;
     background-color: transparent;
-    color: gray;
+    color: #373737;
+    padding: 30px;
 }
