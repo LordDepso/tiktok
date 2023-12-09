@@ -8,7 +8,11 @@
     align-items: center;
     border-bottom-color: white;
     column-gap: 30px;
-} 
+}
+
+.addimgholder {
+    display: none;
+}
 
 .attop {
     display: grid;
@@ -176,13 +180,13 @@ td {
     margin: 10px;
 }
 
-.adddiv > img {
+.adddiv>img {
     width: 160px !important;
     height: 600px !important;
     border-radius: 6px;
-    border: 1px solid rgba(60,60,60,0.5);
-    mask-image: linear-gradient(to top, rgba(255,255,255,0.68) 0%,rgb(255,255,255) 100%);
-   -webkit-mask-image: linear-gradient(to top, rgba(255,255,255,0.8) 0%,rgb(255,255,255) 100%);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    mask-image: linear-gradient(to top, rgba(255, 255, 255, 0.68) 0%, rgb(255, 255, 255) 100%);
+    -webkit-mask-image: linear-gradient(to top, rgba(255, 255, 255, 0.8) 0%, rgb(255, 255, 255) 100%);
 }
 
 .rated-with {

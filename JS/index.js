@@ -21,31 +21,30 @@ function whathappenswhenclicklolhidepsoimabigfanofyouandimalwaysamazedbythething
 
 // Ads
 var addimgholderclass = Array.from(document.getElementsByClassName("addimgholder"));
-var AdImages = [
-    "Assets/ad1.png",
-    "Assets/ad2.png",
-    "Assets/ad3.jpg"
-]
+var numberOfAds = 4;
+
+var usedImages = [];
 
 function getRandomImage() {
-    var randomIndex = Math.floor(Math.random() * AdImages.length);
-    var randomImage = AdImages[randomIndex];
-
-    AdImages.splice(randomIndex, 1);
-
-    if (AdImages.length === 0) {
-        AdImages = [
-            "Assets/ad1.png",
-            "Assets/ad2.png",
-            "Assets/ad3.jpg"
-        ];
+    if (usedImages.length === numberOfAds) {
+        usedImages = [];
     }
 
+    var randomImageNumber;
+    do {
+        randomImageNumber = Math.floor(Math.random() * numberOfAds) + 1;
+    } while (usedImages.includes(randomImageNumber));
+
+    usedImages.push(randomImageNumber);
+
+    var randomImage = `Assets/ad${randomImageNumber}.png`;
     return randomImage;
 }
 
+
 function randomizeads() {
     addimgholderclass.forEach(susdog => {
+        susdog.style.display = "block"
         susdog.src = getRandomImage();
     });
 }
